@@ -17,6 +17,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class APP {
+
     public static void main(String[] args) {
         showMenu();
     }
@@ -60,11 +61,6 @@ public class APP {
             throw new RuntimeException(e);
         }
         Contract contract = client.getContract(channel);
-        try {
-            client.initLedger(contract);
-        } catch (EndorseException | SubmitException | CommitStatusException | CommitException e) {
-            throw new RuntimeException(e);
-        }
         ClientService service = new ClientService();
         Gson gson = new Gson();
         List<User> allUsers;
@@ -78,8 +74,7 @@ public class APP {
 
             byte[] result = contract.evaluateTransaction("getAllUsers");
             String json = JsonUtils.prettyJson(result);
-            Type type = new TypeToken<List<User>>() {
-            }.getType();
+            Type type = new TypeToken<List<User>>(){}.getType();
             allUsers = gson.fromJson(json, type);
         } catch (GatewayException e) {
             throw new RuntimeException(e);
@@ -125,18 +120,13 @@ public class APP {
             throw new RuntimeException(e);
         }
         Contract contract = client.getContract(channel);
-        try {
-            client.initLedger(contract);
-        } catch (EndorseException | SubmitException | CommitStatusException | CommitException e) {
-            throw new RuntimeException(e);
-        }
         ClientService service = new ClientService();
 
         Gson gson = new Gson();
         List<User> allUsers;
         try {
             // 初始化账本数据
-            contract.evaluateTransaction("initLedger");
+            contract.evaluateTransaction("UserContract:initLedger");
             contract.evaluateTransaction("AttributeContract:initLedger");
             contract.evaluateTransaction("ECPolicyContract:initLedger");
             contract.evaluateTransaction("EnergyConsumptionContract:initLedger");

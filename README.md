@@ -51,6 +51,8 @@ The Fabric test network is used to deploy and run this sample. Follow these step
 
    # To deploy the Java chaincode implementation
    sudo ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-java/ -ccl java
+   
+   sudo ./network.sh deployCC -ccn basic -ccp ../shipping-management-system/chaincode-java/ -ccl java
    ```
 
 1. Run the application (from the `asset-transfer-basic` folder).
@@ -66,7 +68,7 @@ The Fabric test network is used to deploy and run this sample. Follow these step
 
    # To run the Java sample application
    cd application-gateway-java
-   ./gradlew run
+   sudo ./gradlew run
    ```
 
 ## Clean up

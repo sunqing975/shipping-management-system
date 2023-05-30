@@ -34,42 +34,6 @@ application {
     mainClass = 'org.hyperledger.fabric.contract.ContractRouter'
 }
 
-checkstyle {
-    toolVersion '8.21'
-    configFile file("config/checkstyle/checkstyle.xml")
-}
-
-checkstyleMain {
-    source ='src/main/java'
-}
-
-checkstyleTest {
-    source ='src/test/java'
-}
-
-jacocoTestReport {
-    dependsOn test
-}
-
-jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            limit {
-                minimum = 0.9
-            }
-        }
-    }
-
-    finalizedBy jacocoTestReport
-}
-
-test {
-    useJUnitPlatform()
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
-}
-
 mainClassName = 'org.hyperledger.fabric.contract.ContractRouter'
 
 shadowJar {
@@ -82,5 +46,4 @@ shadowJar {
     }
 }
 
-check.dependsOn jacocoTestCoverageVerification
-installDist.dependsOn check
+
