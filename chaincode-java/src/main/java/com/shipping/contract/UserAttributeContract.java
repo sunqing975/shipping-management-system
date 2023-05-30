@@ -40,12 +40,12 @@ public final class UserAttributeContract implements ContractInterface {
     @Transaction(intent = Transaction.TYPE.SUBMIT)
     public void initLedger(final Context ctx) {
         ChaincodeStub stub = ctx.getStub();
-        createUserAttribute(ctx, "userAttribute1", "a1", "v1");
-        createUserAttribute(ctx, "userAttribute2", "a2", "v2");
-        createUserAttribute(ctx, "userAttribute3", "a3", "v3");
-        createUserAttribute(ctx, "userAttribute4", "a4", "v4");
-        createUserAttribute(ctx, "userAttribute5", "a5", "v5");
-        createUserAttribute(ctx, "userAttribute6", "a6", "v6");
+        createUserAttribute(ctx, "ua1", "a1", "v1");
+        createUserAttribute(ctx, "ua2", "a2", "v2");
+        createUserAttribute(ctx, "ua3", "a3", "v3");
+        createUserAttribute(ctx, "ua4", "a4", "v4");
+        createUserAttribute(ctx, "ua5", "a5", "v5");
+        createUserAttribute(ctx, "ua6", "a6", "v6");
     }
 
     @Transaction(intent = Transaction.TYPE.SUBMIT)

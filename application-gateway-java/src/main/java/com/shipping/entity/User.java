@@ -40,4 +40,13 @@ public class User {
     public void setRole(Integer role) {
         this.role = role;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", role=" + (role == 1 ? "船员" : "监管员") +
+                '}';
+    }
 }

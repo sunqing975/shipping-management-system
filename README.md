@@ -38,7 +38,7 @@ The Fabric test network is used to deploy and run this sample. Follow these step
 
 1. Create the test network and a channel (from the `test-network` folder).
    ```
-   ./network.sh up createChannel -c mychannel -ca
+   sudo ./network.sh up createChannel -c mychannel -ca
    ```
 
 1. Deploy one of the smart contract implementations (from the `test-network` folder).
@@ -47,10 +47,10 @@ The Fabric test network is used to deploy and run this sample. Follow these step
    ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-typescript/ -ccl typescript
 
    # To deploy the Go chaincode implementation
-   ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-go/ -ccl go
+   sudo ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-go/ -ccl go
 
    # To deploy the Java chaincode implementation
-   ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-java/ -ccl java
+   sudo ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-java/ -ccl java
    ```
 
 1. Run the application (from the `asset-transfer-basic` folder).

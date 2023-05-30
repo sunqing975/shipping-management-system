@@ -9,9 +9,10 @@ package com.shipping.entity;
 public class Attribute {
     private String id;
     private String name;
+
     private String value;
 
-    public Attribute(String id, String name, String value) {
+    public Attribute(String id, String name,String value) {
         this.id = id;
         this.name = name;
         this.value = value;

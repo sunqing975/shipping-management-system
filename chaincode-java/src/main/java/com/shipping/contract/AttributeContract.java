@@ -5,12 +5,10 @@
 package com.shipping.contract;
 
 import com.owlike.genson.Genson;
-import com.shipping.constant.RoleConst;
 import com.shipping.entity.Attribute;
 import org.hyperledger.fabric.contract.Context;
 import org.hyperledger.fabric.contract.ContractInterface;
 import org.hyperledger.fabric.contract.annotation.Contract;
-import org.hyperledger.fabric.contract.annotation.Default;
 import org.hyperledger.fabric.contract.annotation.Transaction;
 import org.hyperledger.fabric.shim.ChaincodeException;
 import org.hyperledger.fabric.shim.ChaincodeStub;
@@ -42,12 +40,13 @@ public final class AttributeContract implements ContractInterface {
     @Transaction(intent = Transaction.TYPE.SUBMIT)
     public void initLedger(final Context ctx) {
         ChaincodeStub stub = ctx.getStub();
-        createAttribute(ctx, "attribute1", "a1", "v1");
-        createAttribute(ctx, "attribute2", "a2", "v2");
-        createAttribute(ctx, "attribute3", "a3", "v3");
-        createAttribute(ctx, "attribute4", "a4", "v4");
-        createAttribute(ctx, "attribute5", "a5", "v5");
-        createAttribute(ctx, "attribute6", "a6", "v6");
+        createAttribute(ctx, "att1", "a1", "v1");
+        createAttribute(ctx, "att12", "a1", "v12");
+        createAttribute(ctx, "att2", "a2", "v2");
+        createAttribute(ctx, "att3", "a3", "v3");
+        createAttribute(ctx, "att4", "a4", "v4");
+        createAttribute(ctx, "att5", "a5", "v5");
+        createAttribute(ctx, "att6", "a6", "v6");
     }
 
     @Transaction(intent = Transaction.TYPE.SUBMIT)
