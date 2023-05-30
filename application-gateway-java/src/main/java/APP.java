@@ -90,8 +90,8 @@ public class APP {
             if (username.equals("0")) {
                 break;
             }
-            boolean login = service.login(allUsers, username);
-            if (login) {
+            String userId = service.login(allUsers, username, 2);
+            if (!StringUtil.isNullOrEmpty(userId)) {
                 System.out.println("登录成功");
                 try {
                     supervisorMenu(contract, username, channel);
@@ -157,11 +157,11 @@ public class APP {
                 client.closeChannel(channel);
                 break;
             }
-            boolean login = service.login(allUsers, username);
-            if (login) {
+            String userId = service.login(allUsers, username, 1);
+            if (!StringUtil.isNullOrEmpty(userId)) {
                 System.out.println("登录成功");
                 try {
-                    marinerMenu(contract, username, channel);
+                    marinerMenu(contract, userId, username, channel);
                 } catch (GatewayException e) {
                     throw new RuntimeException(e);
                 }
@@ -468,7 +468,8 @@ public class APP {
         new SupervisorClient().closeChannel(channel);
     }
 
-    private static void marinerMenu(Contract contract, String username, ManagedChannel channel) throws GatewayException {
+    private static void marinerMenu(Contract contract, String userId, String username, ManagedChannel channel)
+            throws GatewayException {
         System.out.println("============欢迎" + username + "进入船运能耗管理系统============");
         System.out.println("===请选择功能（选择序号）");
         System.out.println("==>1 查询具体的能耗信息");
@@ -480,20 +481,68 @@ public class APP {
         System.out.println("==>0 退出系统");
         Scanner scanner = new Scanner(System.in);
         String input = scanner.next();
+        Gson gson = new Gson();
+        ClientService service = new ClientService();
+
+        // 查询当前船员的属性集
+        List<Attribute> userAttrs = new ArrayList<>();
+        byte[] result = contract.evaluateTransaction("UserAttributeContract:getAllUserAttributes");
+        String json = JsonUtils.prettyJson(result);
+        Type type = new TypeToken<List<UserAttribute>>() {
+        }.getType();
+        List<UserAttribute> userAttributes = gson.fromJson(json, type);
+        for (UserAttribute userAttribute : userAttributes) {
+            if (userAttribute.getUserId().equals(userId)) {
+                byte[] result_1 = contract.evaluateTransaction("UserAttributeContract:readUserAttribute", userAttribute.getId());
+                String json_1 = JsonUtils.prettyJson(result_1);
+                UserAttribute userWithAttribute = gson.fromJson(json_1, UserAttribute.class);
+                byte[] result_2 = contract.evaluateTransaction("AttributeContract:readAttribute", userWithAttribute.getAttributeId());
+                String json_2 = JsonUtils.prettyJson(result_2);
+                Attribute attribute = gson.fromJson(json_2, Attribute.class);
+                userAttrs.add(attribute);
+            }
+        }
 
         while (!input.equals("0")) {
             switch (input) {
                 case "1":
-                    contract.evaluateTransaction("EnergyConsumptionContract:getAllEnergyConsumptions");
+                    // 查询具体的能耗信息
+                    System.out.println("==请输入查询的能耗信息ID==");
+                    String ecId = scanner.next();
+
+                    byte[] result3 = contract.evaluateTransaction("ECPolicyContract:getAllECPolicys");
+                    String allPolicyJsons = JsonUtils.prettyJson(result3);
+                    Type type1 = new TypeToken<List<ECPolicy>>() {
+                    }.getType();
+                    List<ECPolicy> ecPolicyList = gson.fromJson(allPolicyJsons, type1);
+
+                    String policy = null;
+                    for (ECPolicy ecPolicy : ecPolicyList) {
+                        if (ecPolicy.getEcId().equals(ecId)){
+                            policy = ecPolicy.getPolicy();
+                            break;
+                        }
+                    }
+
+                    boolean flag = service.attributeCheck(userAttrs, policy);
+
+                    if (flag){
+                        byte[] result2 = contract.evaluateTransaction("EnergyConsumptionContract:readEnergyConsumption", ecId);
+                        String ecJson = JsonUtils.prettyJson(result2);
+                    }
+
                     break;
                 case "2":
-                    contract.evaluateTransaction("EnergyConsumptionContract:getAllEnergyConsumptions");
+                    // 添加具体的能耗信息及访问策略
+
                     break;
                 case "3":
-                    contract.evaluateTransaction("EnergyConsumptionContract:getAllEnergyConsumptions");
+                    // 更新具体的能耗信息及访问策略
+
                     break;
                 case "4":
-                    contract.evaluateTransaction("EnergyConsumptionContract:getAllEnergyConsumptions");
+                    // 查询所有的属性信息(脱敏)
+
                     break;
                 default:
                     System.out.println("输入异常，请重新输入");
