@@ -40,12 +40,12 @@ public final class ECPolicyContract implements ContractInterface {
     @Transaction(intent = Transaction.TYPE.SUBMIT)
     public void initLedger(final Context ctx) {
         ChaincodeStub stub = ctx.getStub();
-        createECPolicy(ctx, "ecpolicy1", "ec1", "a1:v1_a1:v11_1of2_a2:v2_1of2");
-        createECPolicy(ctx, "ecpolicy2", "ec2", "a1:v1_a1:v11_1of2_a2:v2_1of2");
-        createECPolicy(ctx, "ecpolicy3", "ec3", "a1:v1_a1:v11_1of2_a2:v2_1of2");
-        createECPolicy(ctx, "ecpolicy4", "ec4", "a1:v1_a1:v11_1of2_a2:v2_1of2");
-        createECPolicy(ctx, "ecpolicy5", "ec5", "a1:v1_a1:v11_1of2_a2:v2_1of2");
-        createECPolicy(ctx, "ecpolicy6", "ec6", "a1:v1_a1:v11_1of2_a2:v2_1of2");
+        createECPolicy(ctx, "ecpolicy1", "ec1", "att1 att2 att3 2of3 att4 1of2");
+        createECPolicy(ctx, "ecpolicy2", "ec2", "att1 att2 att3 2of3 att4 1of2");
+        createECPolicy(ctx, "ecpolicy3", "ec3", "att1 att2 att3 2of3 att4 1of2");
+        createECPolicy(ctx, "ecpolicy4", "ec4", "att1 att2 att3 2of3 att4 1of2");
+        createECPolicy(ctx, "ecpolicy5", "ec5", "att1 att2 att3 2of3 att4 1of2");
+        createECPolicy(ctx, "ecpolicy6", "ec6", "att1 att2 att3 2of3 att4 1of2");
     }
 
     @Transaction(intent = Transaction.TYPE.SUBMIT)
