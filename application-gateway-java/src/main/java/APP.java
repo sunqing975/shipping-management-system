@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.time.Instant;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class APP {
     public static void main(String[] args) {
@@ -503,7 +505,7 @@ public class APP {
             }
         }
 
-        while (!input.equals("0")) {
+        while (!"0".equals(input)) {
             switch (input) {
                 case "1":
                     // 查询具体的能耗信息
@@ -515,22 +517,23 @@ public class APP {
                     Type type1 = new TypeToken<List<ECPolicy>>() {
                     }.getType();
                     List<ECPolicy> ecPolicyList = gson.fromJson(allPolicyJsons, type1);
-
+                    Map<String, ECPolicy> policyMap = ecPolicyList.stream()
+                            .collect(Collectors.toMap(ECPolicy::getId, Function.identity()));
                     String policy = null;
                     for (ECPolicy ecPolicy : ecPolicyList) {
-                        if (ecPolicy.getEcId().equals(ecId)){
+                        if (ecPolicy.getEcId().equals(ecId)) {
                             policy = ecPolicy.getPolicy();
                             break;
                         }
                     }
-
                     boolean flag = service.attributeCheck(userAttrs, policy);
-
-                    if (flag){
+                    if (!flag) {
+                        System.err.println("cannot decrypt, attributes in key do not satisfy policy");
+                    } else {
                         byte[] result2 = contract.evaluateTransaction("EnergyConsumptionContract:readEnergyConsumption", ecId);
                         String ecJson = JsonUtils.prettyJson(result2);
+                        System.out.println(ecJson);
                     }
-
                     break;
                 case "2":
                     // 添加具体的能耗信息及访问策略
