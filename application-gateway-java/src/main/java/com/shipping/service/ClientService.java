@@ -18,58 +18,13 @@ public class ClientService {
     }
 
     public boolean attributeCheck(List<Attribute> userAttrs, String policyStr) {
-
         Policy policy = parsePolicyPostfix(policyStr);
+        assert policy != null;
         checkSatisfy(policy, userAttrs);
         return policy.satisfiable;
     }
 
-    public static String[] parseAttribute(List<Attribute> userAttrs) {
-
-        StringBuilder builder = new StringBuilder();
-        for (Attribute attribute : userAttrs) {
-            builder.append(attribute.getName()).append(":").append(attribute.getValue()).append(" ");
-        }
-        String s = builder.toString();
-
-        ArrayList<String> str_arr = new ArrayList<>();
-        StringTokenizer st = new StringTokenizer(s);
-        String token;
-        String res[];
-        int len;
-
-        while (st.hasMoreTokens()) {
-            token = st.nextToken();
-            if (token.contains(":")) {
-                str_arr.add(token);
-            } else {
-                System.out.println("Some error happens in the input attribute");
-                System.exit(0);
-            }
-        }
-
-        Collections.sort(str_arr, new SortByAlphabetic());
-
-        len = str_arr.size();
-        res = new String[len];
-        for (int i = 0; i < len; i++) {
-            res[i] = str_arr.get(i);
-        }
-        return res;
-    }
-
-    static class SortByAlphabetic implements Comparator<String> {
-        @Override
-        public int compare(String s1, String s2) {
-            if (s1.compareTo(s2) >= 0) {
-                return 1;
-            }
-            return 0;
-        }
-
-    }
-
-    public static Policy parsePolicyPostfix(String s) {
+    private static Policy parsePolicyPostfix(String s) {
         String[] toks;
         String tok;
         ArrayList<Policy> stack = new ArrayList<>();
@@ -77,11 +32,10 @@ public class ClientService {
 
         toks = s.split(" ");
 
-        int toks_cnt = toks.length;
-        for (int index = 0; index < toks_cnt; index++) {
+        for (String value : toks) {
             int i, k, n;
 
-            tok = toks[index];
+            tok = value;
             if (!tok.contains("of")) {
                 stack.add(baseNode(1, tok));
             } else {

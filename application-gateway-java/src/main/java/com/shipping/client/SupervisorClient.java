@@ -4,35 +4,19 @@ package com.shipping.client;/*
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParser;
-import com.shipping.entity.User;
 import io.grpc.Grpc;
 import io.grpc.ManagedChannel;
 import io.grpc.TlsChannelCredentials;
-import org.hyperledger.fabric.client.CommitException;
-import org.hyperledger.fabric.client.CommitStatusException;
 import org.hyperledger.fabric.client.Contract;
-import org.hyperledger.fabric.client.EndorseException;
 import org.hyperledger.fabric.client.Gateway;
-import org.hyperledger.fabric.client.GatewayException;
-import org.hyperledger.fabric.client.SubmitException;
-import org.hyperledger.fabric.client.identity.Identities;
-import org.hyperledger.fabric.client.identity.Identity;
-import org.hyperledger.fabric.client.identity.Signer;
-import org.hyperledger.fabric.client.identity.Signers;
-import org.hyperledger.fabric.client.identity.X509Identity;
+import org.hyperledger.fabric.client.identity.*;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.cert.CertificateException;
-import java.time.Instant;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public final class SupervisorClient {
@@ -43,9 +27,9 @@ public final class SupervisorClient {
     // Path to crypto materials.
     private static final Path CRYPTO_PATH = Paths.get("../../test-network/organizations/peerOrganizations/org2.example.com");
     // Path to user certificate.
-    private static final Path CERT_PATH = CRYPTO_PATH.resolve(Paths.get("users/User2@org1.example.com/msp/signcerts/User1@org2.example.com-cert.pem"));
+    private static final Path CERT_PATH = CRYPTO_PATH.resolve(Paths.get("users/User1@org2.example.com/msp/signcerts/cert.pem"));
     // Path to user private key directory.
-    private static final Path KEY_DIR_PATH = CRYPTO_PATH.resolve(Paths.get("users/User2@org1.example.com/msp/keystore"));
+    private static final Path KEY_DIR_PATH = CRYPTO_PATH.resolve(Paths.get("users/User1@org2.example.com/msp/keystore"));
     // Path to peer tls certificate.
     private static final Path TLS_CERT_PATH = CRYPTO_PATH.resolve(Paths.get("peers/peer0.org2.example.com/tls/ca.crt"));
 
@@ -56,14 +40,18 @@ public final class SupervisorClient {
     public static void main(final String[] args) throws Exception {
         SupervisorClient client = new SupervisorClient();
         ManagedChannel channel = client.newGrpcConnection();
-        Contract contract = client.getContract(channel);
-        contract.submitTransaction("initLedger");
-        contract.submitTransaction("AttributeContract:initLedger");
-        contract.submitTransaction("ECPolicyContract:initLedger");
-        contract.submitTransaction("EnergyConsumptionContract:initLedger");
-        contract.submitTransaction("UserAttributeContract:initLedger");
 
-
+        Contract userContract = client.getContract(channel, "UserContract");
+        userContract.submitTransaction("initLedger");
+        Contract attributeContract = client.getContract(channel, "AttributeContract");
+        attributeContract.submitTransaction("initLedger");
+        Contract ecPolicyContract = client.getContract(channel, "ECPolicyContract");
+        ecPolicyContract.submitTransaction("initLedger");
+        Contract energyConsumptionContract = client.getContract(channel, "EnergyConsumptionContract");
+        energyConsumptionContract.submitTransaction("initLedger");
+        Contract userAttributeContract = client.getContract(channel, "UserAttributeContract");
+        userAttributeContract.submitTransaction("initLedger");
+        System.out.println("链码执行完成");
         client.closeChannel(channel);
 
     }
@@ -76,7 +64,7 @@ public final class SupervisorClient {
         }
     }
 
-    public Contract getContract(ManagedChannel channel) {
+    public Contract getContract(ManagedChannel channel, String contractName) {
         Gateway.Builder builder;
         try {
             builder = Gateway.newInstance().identity(newIdentity()).signer(newSigner()).connection(channel)
@@ -91,7 +79,7 @@ public final class SupervisorClient {
         Gateway gateway = builder.connect();
         var network = gateway.getNetwork(CHANNEL_NAME);
         // Get the smart contract from the network.
-        return network.getContract(CHAINCODE_NAME);
+        return network.getContract(CHAINCODE_NAME, contractName);
     }
 
     public ManagedChannel newGrpcConnection() throws IOException {

@@ -7,7 +7,8 @@ package com.shipping.client;/*
 import io.grpc.Grpc;
 import io.grpc.ManagedChannel;
 import io.grpc.TlsChannelCredentials;
-import org.hyperledger.fabric.client.*;
+import org.hyperledger.fabric.client.Contract;
+import org.hyperledger.fabric.client.Gateway;
 import org.hyperledger.fabric.client.identity.*;
 
 import java.io.IOException;
@@ -26,7 +27,7 @@ public final class MarinerClient {
     // Path to crypto materials.
     private static final Path CRYPTO_PATH = Paths.get("../../test-network/organizations/peerOrganizations/org1.example.com");
     // Path to user certificate.
-    private static final Path CERT_PATH = CRYPTO_PATH.resolve(Paths.get("users/User1@org1.example.com/msp/signcerts/User1@org1.example.com-cert.pem"));
+    private static final Path CERT_PATH = CRYPTO_PATH.resolve(Paths.get("users/User1@org1.example.com/msp/signcerts/cert.pem"));
     // Path to user private key directory.
     private static final Path KEY_DIR_PATH = CRYPTO_PATH.resolve(Paths.get("users/User1@org1.example.com/msp/keystore"));
     // Path to peer tls certificate.
@@ -39,13 +40,17 @@ public final class MarinerClient {
     public static void main(final String[] args) throws Exception {
         MarinerClient client = new MarinerClient();
         ManagedChannel channel = client.newGrpcConnection();
-        Contract contract = client.getContract(channel);
-        contract.submitTransaction("initLedger");
-        contract.submitTransaction("AttributeContract:initLedger");
-        contract.submitTransaction("ECPolicyContract:initLedger");
-        contract.submitTransaction("EnergyConsumptionContract:initLedger");
-        contract.submitTransaction("UserAttributeContract:initLedger");
-
+        Contract userContract = client.getContract(channel, "UserContract");
+        userContract.submitTransaction("initLedger");
+        Contract attributeContract = client.getContract(channel, "AttributeContract");
+        attributeContract.submitTransaction("initLedger");
+        Contract ecPolicyContract = client.getContract(channel, "ECPolicyContract");
+        ecPolicyContract.submitTransaction("initLedger");
+        Contract energyConsumptionContract = client.getContract(channel, "EnergyConsumptionContract");
+        energyConsumptionContract.submitTransaction("initLedger");
+        Contract userAttributeContract = client.getContract(channel, "UserAttributeContract");
+        userAttributeContract.submitTransaction("initLedger");
+        System.out.println("链码执行完成");
         client.closeChannel(channel);
     }
 
@@ -57,7 +62,7 @@ public final class MarinerClient {
         }
     }
 
-    public Contract getContract(ManagedChannel channel) {
+    public Contract getContract(ManagedChannel channel, String contractName) {
         Gateway.Builder builder;
         try {
             builder = Gateway.newInstance().identity(newIdentity()).signer(newSigner()).connection(channel)
@@ -72,7 +77,7 @@ public final class MarinerClient {
         Gateway gateway = builder.connect();
         var network = gateway.getNetwork(CHANNEL_NAME);
         // Get the smart contract from the network.
-        return network.getContract(CHAINCODE_NAME);
+        return network.getContract(CHAINCODE_NAME, contractName);
     }
 
 
