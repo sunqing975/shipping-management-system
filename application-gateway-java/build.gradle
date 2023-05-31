@@ -38,11 +38,11 @@ shadowJar {
     version = '1.0.0'
     manifest {
         // 这里指定main class
-        attributes 'Main-Class': 'com.shipping.APP'
+        attributes 'Main-Class': 'com.shipping.App'
     }
 }
 application {
     // Define the main class for the application.
-    mainClass = 'com.shipping.APP'
-    mainClassName = 'com.shipping.APP'
+    mainClass = 'com.shipping.App'
+    mainClassName = 'com.shipping.App'
 }

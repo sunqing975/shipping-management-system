@@ -2,16 +2,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.shipping.contract;
+package com.shipping;
 
 import com.owlike.genson.Genson;
-import com.shipping.constant.RoleConst;
 import org.hyperledger.fabric.contract.Context;
 import org.hyperledger.fabric.contract.ContractInterface;
 import org.hyperledger.fabric.contract.annotation.Contract;
 import org.hyperledger.fabric.contract.annotation.Default;
 import org.hyperledger.fabric.contract.annotation.Transaction;
-import com.shipping.entity.User;
 import org.hyperledger.fabric.shim.ChaincodeException;
 import org.hyperledger.fabric.shim.ChaincodeStub;
 import org.hyperledger.fabric.shim.ledger.KeyValue;
@@ -57,7 +55,7 @@ public final class UserContract implements ContractInterface {
         if (userExists(ctx, id)) {
             String errorMessage = String.format("User %s already exists", id);
             System.out.println(errorMessage);
-            throw new ChaincodeException(errorMessage, UserContractErrors.USER_ALREADY_EXISTS.toString());
+//            throw new ChaincodeException(errorMessage, UserContractErrors.USER_ALREADY_EXISTS.toString());
         }
         User user = new User(id, username, role);
         // Use Genson to convert the User into string, sort it alphabetically and serialize it into a json string

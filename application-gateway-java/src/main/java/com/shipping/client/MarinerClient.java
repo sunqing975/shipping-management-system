@@ -4,6 +4,10 @@ package com.shipping.client;/*
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.shipping.entity.User;
+import com.shipping.utils.JsonUtils;
 import io.grpc.Grpc;
 import io.grpc.ManagedChannel;
 import io.grpc.TlsChannelCredentials;
@@ -12,11 +16,13 @@ import org.hyperledger.fabric.client.Gateway;
 import org.hyperledger.fabric.client.identity.*;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.cert.CertificateException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public final class MarinerClient {
@@ -51,6 +57,16 @@ public final class MarinerClient {
         Contract userAttributeContract = client.getContract(channel, "UserAttributeContract");
         userAttributeContract.submitTransaction("initLedger");
         System.out.println("链码执行完成");
+
+        List<User> allUsers;
+
+        byte[] result = userContract.evaluateTransaction("getAllUsers");
+        String json = JsonUtils.prettyJson(result);
+        Type type = new TypeToken<List<User>>() {
+        }.getType();
+        Gson gson = new Gson();
+        allUsers = gson.fromJson(json, type);
+        System.out.println(allUsers);
         client.closeChannel(channel);
     }
 

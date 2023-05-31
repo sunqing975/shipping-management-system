@@ -1,7 +1,7 @@
-package com.shipping.entity;
+package com.shipping;
 
 /**
- * @className: com.shipping.entity.Attribute
+ * @className: com.shipping.Attribute
  * @author: Superman
  * @create: 2023-05-17 21:38
  * @description: TODO

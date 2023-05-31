@@ -1,7 +1,7 @@
-package com.shipping.entity;
+package com.shipping;
 
 /**
- * @className: com.shipping.entity.ECPolicy
+ * @className: com.shipping.ECPolicy
  * @author: Superman
  * @create: 2023-05-17 21:40
  * @description: TODO

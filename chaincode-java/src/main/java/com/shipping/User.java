@@ -1,7 +1,7 @@
-package com.shipping.entity;
+package com.shipping;
 
 /**
- * @className: com.shipping.entity.User
+ * @className: com.shipping.User
  * @author: Superman
  * @create: 2023-05-17 21:38
  * @description: TODO

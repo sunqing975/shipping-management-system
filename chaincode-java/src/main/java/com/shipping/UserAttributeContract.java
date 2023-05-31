@@ -2,10 +2,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.shipping.contract;
+package com.shipping;
 
 import com.owlike.genson.Genson;
-import com.shipping.entity.UserAttribute;
 import org.hyperledger.fabric.contract.Context;
 import org.hyperledger.fabric.contract.ContractInterface;
 import org.hyperledger.fabric.contract.annotation.Contract;
@@ -54,7 +53,7 @@ public final class UserAttributeContract implements ContractInterface {
         if (userAttributeExists(ctx, id)) {
             String errorMessage = String.format("UserAttribute %s already exists", id);
             System.out.println(errorMessage);
-            throw new ChaincodeException(errorMessage, UserAttributeContractErrors.USERATTRIBUTE_ALREADY_EXISTS.toString());
+//            throw new ChaincodeException(errorMessage, UserAttributeContractErrors.USERATTRIBUTE_ALREADY_EXISTS.toString());
         }
         UserAttribute userAttribute = new UserAttribute(id, userId, attributeId);
         // Use Genson to convert the UserAttribute into string, sort it alphabetically and serialize it into a json string

@@ -2,10 +2,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.shipping.contract;
+package com.shipping;
 
 import com.owlike.genson.Genson;
-import com.shipping.entity.EnergyConsumption;
 import org.hyperledger.fabric.contract.Context;
 import org.hyperledger.fabric.contract.ContractInterface;
 import org.hyperledger.fabric.contract.annotation.Contract;
@@ -66,8 +65,8 @@ public final class EnergyConsumptionContract implements ContractInterface {
         if (energyConsumptionExists(ctx, id)) {
             String errorMessage = String.format("EnergyConsumption %s already exists", id);
             System.out.println(errorMessage);
-            throw new ChaincodeException(errorMessage,
-                    EnergyConsumptionContractErrors.ENERGY_CONSUMPTION_ALREADY_EXISTS.toString());
+//            throw new ChaincodeException(errorMessage,
+//                    EnergyConsumptionContractErrors.ENERGY_CONSUMPTION_ALREADY_EXISTS.toString());
         }
         EnergyConsumption energyConsumption = new EnergyConsumption(id, orgCode, shipId,
                 shipName, shipType,

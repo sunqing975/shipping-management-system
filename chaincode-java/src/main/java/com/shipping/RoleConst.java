@@ -1,4 +1,4 @@
-package com.shipping.constant;
+package com.shipping;
 
 /**
  * @className: com.shipping.constant.Role

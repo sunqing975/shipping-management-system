@@ -16,7 +16,7 @@ import java.lang.reflect.Type;
 import java.time.Instant;
 import java.util.*;
 
-public class APP {
+public class App {
 
     public static final String USER_CONTRACT = "UserContract";
     public static final String ATTRIBUTE_CONTRACT = "AttributeContract";
@@ -25,10 +25,14 @@ public class APP {
     public static final String USER_ATTRIBUTE_CONTRACT = "UserAttributeContract";
 
     public static void main(String[] args) {
-        showMenu();
+        try {
+            showMenu();
+        } catch (CommitException | GatewayException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private static void showMenu() {
+    private static void showMenu() throws GatewayException, CommitException {
         System.out.println("============欢迎进入船运能耗管理系统============");
         System.out.println("===请选择您的身份（选择序号）");
         System.out.println("==>1 船员");
@@ -51,7 +55,7 @@ public class APP {
         }
     }
 
-    private static void supervisorLoginAndConn() {
+    private static void supervisorLoginAndConn() throws GatewayException, CommitException {
         System.out.println("============欢迎监管员进入船运能耗管理系统============");
         System.out.println("==>0 退出系统");
         System.out.println("登录：");
@@ -67,32 +71,37 @@ public class APP {
             throw new RuntimeException(e);
         }
 
-        Contract userContract = client.getContract(channel, USER_CONTRACT);
-        Contract attributeContract = client.getContract(channel, ATTRIBUTE_CONTRACT);
-        Contract ecPolicyContract = client.getContract(channel, EC_POLICY_CONTRACT);
-        Contract energyConsumptionContract = client.getContract(channel, ENERGY_CONSUMPTION_CONTRACT);
-        Contract userAttributeContract = client.getContract(channel, USER_ATTRIBUTE_CONTRACT);
+        Contract userContract = client.getContract(channel, "UserContract");
+
+        Contract attributeContract = client.getContract(channel, "AttributeContract");
+
+        Contract ecPolicyContract = client.getContract(channel, "ECPolicyContract");
+
+        Contract energyConsumptionContract = client.getContract(channel, "EnergyConsumptionContract");
+
+        Contract userAttributeContract = client.getContract(channel, "UserAttributeContract");
+
+
+        // 初始化账本数据
+
+        userContract.submitTransaction("initLedger");
+        attributeContract.submitTransaction("initLedger");
+        ecPolicyContract.submitTransaction("initLedger");
+        energyConsumptionContract.submitTransaction("initLedger");
+        userAttributeContract.submitTransaction("initLedger");
+
 
         ClientService service = new ClientService();
 
         Gson gson = new Gson();
         List<User> allUsers;
-        try {
-            // 初始化账本数据
-            userContract.submitTransaction("initLedger");
-            attributeContract.submitTransaction("initLedger");
-            ecPolicyContract.submitTransaction("initLedger");
-            energyConsumptionContract.submitTransaction("initLedger");
-            userAttributeContract.submitTransaction("initLedger");
 
-            byte[] result = userContract.evaluateTransaction("getAllUsers");
-            String json = JsonUtils.prettyJson(result);
-            Type type = new TypeToken<List<User>>() {
-            }.getType();
-            allUsers = gson.fromJson(json, type);
-        } catch (GatewayException | CommitException e) {
-            throw new RuntimeException(e);
-        }
+        byte[] result = userContract.evaluateTransaction("getAllUsers");
+        String json = JsonUtils.prettyJson(result);
+        Type type = new TypeToken<List<User>>() {
+        }.getType();
+        allUsers = gson.fromJson(json, type);
+
         if (Objects.isNull(allUsers)) {
             System.out.println("==账本无数据==");
             return;
@@ -141,24 +150,28 @@ public class APP {
         Contract energyConsumptionContract = client.getContract(channel, ENERGY_CONSUMPTION_CONTRACT);
         Contract userAttributeContract = client.getContract(channel, USER_ATTRIBUTE_CONTRACT);
 
-        ClientService service = new ClientService();
-
-        Gson gson = new Gson();
-        List<User> allUsers;
+        // 初始化账本数据
         try {
-            // 初始化账本数据
             userContract.submitTransaction("initLedger");
             attributeContract.submitTransaction("initLedger");
             ecPolicyContract.submitTransaction("initLedger");
             energyConsumptionContract.submitTransaction("initLedger");
             userAttributeContract.submitTransaction("initLedger");
+        } catch (EndorseException | CommitException | SubmitException | CommitStatusException e) {
+            throw new RuntimeException(e);
+        }
 
+        ClientService service = new ClientService();
+
+        Gson gson = new Gson();
+        List<User> allUsers;
+        try {
             byte[] result = userContract.evaluateTransaction("getAllUsers");
             String json = JsonUtils.prettyJson(result);
             Type type = new TypeToken<List<User>>() {
             }.getType();
             allUsers = gson.fromJson(json, type);
-        } catch (GatewayException | CommitException e) {
+        } catch (GatewayException e) {
             throw new RuntimeException(e);
         }
         if (Objects.isNull(allUsers)) {
