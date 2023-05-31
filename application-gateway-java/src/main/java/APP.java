@@ -66,17 +66,18 @@ public class APP {
         List<User> allUsers;
         try {
             // 初始化账本数据
-            contract.evaluateTransaction("initLedger");
-            contract.evaluateTransaction("AttributeContract:initLedger");
-            contract.evaluateTransaction("ECPolicyContract:initLedger");
-            contract.evaluateTransaction("EnergyConsumptionContract:initLedger");
-            contract.evaluateTransaction("UserAttributeContract:initLedger");
+            contract.submitTransaction("initLedger");
+            contract.submitTransaction("AttributeContract:initLedger");
+            contract.submitTransaction("ECPolicyContract:initLedger");
+            contract.submitTransaction("EnergyConsumptionContract:initLedger");
+            contract.submitTransaction("UserAttributeContract:initLedger");
 
             byte[] result = contract.evaluateTransaction("getAllUsers");
             String json = JsonUtils.prettyJson(result);
-            Type type = new TypeToken<List<User>>(){}.getType();
+            Type type = new TypeToken<List<User>>() {
+            }.getType();
             allUsers = gson.fromJson(json, type);
-        } catch (GatewayException e) {
+        } catch (GatewayException | CommitException e) {
             throw new RuntimeException(e);
         }
         if (Objects.isNull(allUsers)) {
@@ -126,18 +127,18 @@ public class APP {
         List<User> allUsers;
         try {
             // 初始化账本数据
-            contract.evaluateTransaction("UserContract:initLedger");
-            contract.evaluateTransaction("AttributeContract:initLedger");
-            contract.evaluateTransaction("ECPolicyContract:initLedger");
-            contract.evaluateTransaction("EnergyConsumptionContract:initLedger");
-            contract.evaluateTransaction("UserAttributeContract:initLedger");
+            contract.submitTransaction("initLedger");
+            contract.submitTransaction("AttributeContract:initLedger");
+            contract.submitTransaction("ECPolicyContract:initLedger");
+            contract.submitTransaction("EnergyConsumptionContract:initLedger");
+            contract.submitTransaction("UserAttributeContract:initLedger");
 
             byte[] result = contract.evaluateTransaction("getAllUsers");
             String json = JsonUtils.prettyJson(result);
             Type type = new TypeToken<List<User>>() {
             }.getType();
             allUsers = gson.fromJson(json, type);
-        } catch (GatewayException e) {
+        } catch (GatewayException | CommitException e) {
             throw new RuntimeException(e);
         }
         if (Objects.isNull(allUsers)) {
@@ -507,8 +508,6 @@ public class APP {
                     Type type1 = new TypeToken<List<ECPolicy>>() {
                     }.getType();
                     List<ECPolicy> ecPolicyList = gson.fromJson(allPolicyJsons, type1);
-                    Map<String, ECPolicy> policyMap = ecPolicyList.stream()
-                            .collect(Collectors.toMap(ECPolicy::getId, Function.identity()));
                     String policy = null;
                     for (ECPolicy ecPolicy : ecPolicyList) {
                         if (ecPolicy.getEcId().equals(ecId)) {

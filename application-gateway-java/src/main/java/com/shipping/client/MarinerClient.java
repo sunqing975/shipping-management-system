@@ -26,7 +26,7 @@ public final class MarinerClient {
     // Path to crypto materials.
     private static final Path CRYPTO_PATH = Paths.get("../../test-network/organizations/peerOrganizations/org1.example.com");
     // Path to user certificate.
-    private static final Path CERT_PATH = CRYPTO_PATH.resolve(Paths.get("users/User1@org1.example.com/msp/signcerts/cert.pem"));
+    private static final Path CERT_PATH = CRYPTO_PATH.resolve(Paths.get("users/User1@org1.example.com/msp/signcerts/User1@org1.example.com-cert.pem"));
     // Path to user private key directory.
     private static final Path KEY_DIR_PATH = CRYPTO_PATH.resolve(Paths.get("users/User1@org1.example.com/msp/keystore"));
     // Path to peer tls certificate.
@@ -40,6 +40,12 @@ public final class MarinerClient {
         MarinerClient client = new MarinerClient();
         ManagedChannel channel = client.newGrpcConnection();
         Contract contract = client.getContract(channel);
+        contract.submitTransaction("initLedger");
+        contract.submitTransaction("AttributeContract:initLedger");
+        contract.submitTransaction("ECPolicyContract:initLedger");
+        contract.submitTransaction("EnergyConsumptionContract:initLedger");
+        contract.submitTransaction("UserAttributeContract:initLedger");
+
         client.closeChannel(channel);
     }
 
