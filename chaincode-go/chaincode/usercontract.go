@@ -3,6 +3,7 @@ package chaincode
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
@@ -140,7 +141,8 @@ func (s *UserContract) UserExists(ctx contractapi.TransactionContextInterface, i
 func (s *UserContract) GetAllUsers(ctx contractapi.TransactionContextInterface) ([]*User, error) {
 	// range query with empty string for startKey and endKey does an
 	// open-ended query of all users in the chaincode namespace.
-	resultsIterator, err := ctx.GetStub().GetStateByRange("", "")
+
+	resultsIterator, err := ctx.GetStub().GetStateByRange("user1", "user"+string(math.MaxInt64))
 	if err != nil {
 		return nil, err
 	}

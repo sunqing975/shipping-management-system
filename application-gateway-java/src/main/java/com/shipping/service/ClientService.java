@@ -11,7 +11,7 @@ public class ClientService {
     public String login(List<User> users, String username, int role) {
         for (User user : users) {
             if (user.getUsername().equals(username) && user.getRole() == role) {
-                return user.getId();
+                return user.getID();
             }
         }
         return null;
@@ -109,7 +109,7 @@ public class ClientService {
         p.satisfiable = false;
         if (p.children == null || p.children.length == 0) {
             for (i = 0; i < userAttrs.size(); i++) {
-                prvAttr = userAttrs.get(i).getId();
+                prvAttr = userAttrs.get(i).getID();
                 if (prvAttr.compareTo(p.attr) == 0) {
                     // System.out.println("=staisfy=");
                     p.satisfiable = true;

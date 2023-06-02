@@ -7,37 +7,46 @@ package com.shipping.entity;
  * @description: TODO
  */
 public class UserAttribute {
-    private String id;
-    private String userId;
-    private String attributeId;
+    private String ID;
+    private String UserId;
+    private String AttId;
 
-    public UserAttribute(String id, String userId, String attributeId) {
-        this.id = id;
-        this.userId = userId;
-        this.attributeId = attributeId;
+    public UserAttribute(String ID, String userId, String attributeId) {
+        this.ID = ID;
+        UserId = userId;
+        AttId = attributeId;
     }
 
-    public String getId() {
-        return id;
+    public String getID() {
+        return ID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setID(String ID) {
+        this.ID = ID;
     }
 
     public String getUserId() {
-        return userId;
+        return UserId;
     }
 
     public void setUserId(String userId) {
-        this.userId = userId;
+        UserId = userId;
     }
 
-    public String getAttributeId() {
-        return attributeId;
+    public String getAttId() {
+        return AttId;
     }
 
-    public void setAttributeId(String attributeId) {
-        this.attributeId = attributeId;
+    public void setAttId(String attId) {
+        AttId = attId;
+    }
+
+    @Override
+    public String toString() {
+        return "UserAttribute{" +
+                "ID='" + ID + '\'' +
+                ", UserId='" + UserId + '\'' +
+                ", AttId='" + AttId + '\'' +
+                '}';
     }
 }

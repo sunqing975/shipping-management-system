@@ -7,37 +7,46 @@ package com.shipping.entity;
  * @description: TODO
  */
 public class ECPolicy {
-    private String id;
-    private String ecId;
-    private String policy;
+    private String ID;
+    private String EcId;
+    private String Policy;
 
-    public ECPolicy(String id, String ecId, String policy) {
-        this.id = id;
-        this.ecId = ecId;
-        this.policy = policy;
+    public ECPolicy(String ID, String ecId, String policy) {
+        this.ID = ID;
+        EcId = ecId;
+        Policy = policy;
     }
 
-    public String getId() {
-        return id;
+    public String getID() {
+        return ID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setID(String ID) {
+        this.ID = ID;
     }
 
     public String getEcId() {
-        return ecId;
+        return EcId;
     }
 
     public void setEcId(String ecId) {
-        this.ecId = ecId;
+        EcId = ecId;
     }
 
     public String getPolicy() {
-        return policy;
+        return Policy;
     }
 
     public void setPolicy(String policy) {
-        this.policy = policy;
+        Policy = policy;
+    }
+
+    @Override
+    public String toString() {
+        return "ECPolicy{" +
+                "ID='" + ID + '\'' +
+                ", EcId='" + EcId + '\'' +
+                ", Policy='" + Policy + '\'' +
+                '}';
     }
 }

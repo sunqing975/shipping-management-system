@@ -3,6 +3,7 @@ package chaincode
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
@@ -16,21 +17,42 @@ type EnergyConsumptionContract struct {
 // Insert struct field in alphabetic order => to achieve determinism across languages
 // golang keeps the order when marshal to json but doesn't order automatically
 type EnergyConsumption struct {
-	ID    string `json:"ID"`
-	Name  string `json:"Name"`
-	Value string `json:"Value"`
+	ID                  string  `json:"ID"`
+	OrgCode             int     `json:"OrgCode"`
+	ShipId              int     `json:"ShipId"`
+	ShipName            string  `json:"ShipName"`
+	ShipType            string  `json:"ShipType"`
+	ShipSize            float64 `json:"ShipSize"`
+	EnergyType          float64 `json:"EnergyType"`
+	EnergyName          string  `json:"EnergyName"`
+	ConsumeQuantity     float64 `json:"ConsumeQuantity"`
+	ConsumeQuantityUnit string  `json:"ConsumeQuantityUnit"`
+	OperatorId          string  `json:"OperatorId"`
+	StartTime           int64   `json:"StartTime"`
+	EndTime             int64   `json:"EndTime"`
 }
 
 // InitLedger adds a base set of energyConsumptions to the ledger
 func (s *EnergyConsumptionContract) InitLedger(ctx contractapi.TransactionContextInterface) error {
 	energyConsumptions := []EnergyConsumption{
-		{ID: "att1", Name: "a1", Value: "v1"},
-		{ID: "att2", Name: "a2", Value: "v2"},
-		{ID: "attr3", Name: "a3", Value: "v3"},
-		{ID: "att4", Name: "a4", Value: "v4"},
-		{ID: "att5", Name: "a5", Value: "v5"},
-		{ID: "att6", Name: "a6", Value: "v6"},
-		{ID: "att7", Name: "a1", Value: "v2"},
+		{ID: "ec1", OrgCode: 100, ShipId: 1, ShipName: "ship1", ShipType: "large",
+			ShipSize: 53.5, EnergyType: 0.0, EnergyName: "岸电", ConsumeQuantity: 12.5,
+			ConsumeQuantityUnit: "kw.h", OperatorId: "user1", StartTime: 1684422876, EndTime: 1684422901},
+		{ID: "ec2", OrgCode: 100, ShipId: 2, ShipName: "ship2", ShipType: "small",
+			ShipSize: 13.5, EnergyType: 0.2, EnergyName: "柴油/汽油（MDO/MGO", ConsumeQuantity: 4.0,
+			ConsumeQuantityUnit: "吨", OperatorId: "user1", StartTime: 1684422876, EndTime: 1684422901},
+		{ID: "ec3", OrgCode: 100, ShipId: 3, ShipName: "ship3", ShipType: "medium",
+			ShipSize: 33.5, EnergyType: 2.2, EnergyName: "轻燃油（LFO） 硫含量高于0.1% m/m，但不高于0.5% m/m", ConsumeQuantity: 181.19,
+			ConsumeQuantityUnit: "吨", OperatorId: "user2", StartTime: 1684422876, EndTime: 1684422901},
+		{ID: "ec4", OrgCode: 100, ShipId: 4, ShipName: "ship4", ShipType: "large",
+			ShipSize: 73.6, EnergyType: 0.2, EnergyName: "岸电", ConsumeQuantity: 12.5,
+			ConsumeQuantityUnit: "kw.h", OperatorId: "user2", StartTime: 1684422876, EndTime: 1684422901},
+		{ID: "ec5", OrgCode: 100, ShipId: 5, ShipName: "ship5", ShipType: "medium",
+			ShipSize: 43.6, EnergyType: 0.2, EnergyName: "岸电", ConsumeQuantity: 12.5,
+			ConsumeQuantityUnit: "kw.h", OperatorId: "user3", StartTime: 1684422876, EndTime: 1684422901},
+		{ID: "ec6", OrgCode: 100, ShipId: 6, ShipName: "ship5", ShipType: "large",
+			ShipSize: 63.5, EnergyType: 0.2, EnergyName: "重燃油（HFO） 硫含量高于0.5% m/m\"", ConsumeQuantity: 519.75,
+			ConsumeQuantityUnit: "吨", OperatorId: "user3", StartTime: 1684422876, EndTime: 1684422901},
 	}
 
 	for _, energyConsumption := range energyConsumptions {
@@ -49,7 +71,9 @@ func (s *EnergyConsumptionContract) InitLedger(ctx contractapi.TransactionContex
 }
 
 // CreateEnergyConsumption issues a new energyConsumption to the world state with given details.
-func (s *EnergyConsumptionContract) CreateEnergyConsumption(ctx contractapi.TransactionContextInterface, id string, name string, value string) error {
+func (s *EnergyConsumptionContract) CreateEnergyConsumption(ctx contractapi.TransactionContextInterface, id string,
+	orgCode int, shipId int, shipName string, shipType string, shipSize float64, energyType float64, energyName string,
+	consumeQuantity float64, consumeQuantityUnit string, operatorId string, startTime int64, endTime int64) error {
 	exists, err := s.EnergyConsumptionExists(ctx, id)
 	if err != nil {
 		return err
@@ -59,9 +83,19 @@ func (s *EnergyConsumptionContract) CreateEnergyConsumption(ctx contractapi.Tran
 	}
 
 	energyConsumption := EnergyConsumption{
-		ID:    id,
-		Name:  name,
-		Value: value,
+		ID:                  id,
+		OrgCode:             orgCode,
+		ShipId:              shipId,
+		ShipName:            shipName,
+		ShipType:            shipType,
+		ShipSize:            shipSize,
+		EnergyType:          energyType,
+		EnergyName:          energyName,
+		ConsumeQuantity:     consumeQuantity,
+		ConsumeQuantityUnit: consumeQuantityUnit,
+		OperatorId:          operatorId,
+		StartTime:           startTime,
+		EndTime:             endTime,
 	}
 	energyConsumptionJSON, err := json.Marshal(energyConsumption)
 	if err != nil {
@@ -91,7 +125,10 @@ func (s *EnergyConsumptionContract) ReadEnergyConsumption(ctx contractapi.Transa
 }
 
 // UpdateEnergyConsumption updates an existing energyConsumption in the world state with provided parameters.
-func (s *EnergyConsumptionContract) UpdateEnergyConsumption(ctx contractapi.TransactionContextInterface, id string, name string, value string) error {
+func (s *EnergyConsumptionContract) UpdateEnergyConsumption(ctx contractapi.TransactionContextInterface,
+	id string,
+	orgCode int, shipId int, shipName string, shipType string, shipSize float64, energyType float64, energyName string,
+	consumeQuantity float64, consumeQuantityUnit string, operatorId string, startTime int64, endTime int64) error {
 	exists, err := s.EnergyConsumptionExists(ctx, id)
 	if err != nil {
 		return err
@@ -102,9 +139,19 @@ func (s *EnergyConsumptionContract) UpdateEnergyConsumption(ctx contractapi.Tran
 
 	// overwriting original energyConsumption with new energyConsumption
 	energyConsumption := EnergyConsumption{
-		ID:    id,
-		Name:  name,
-		Value: value,
+		ID:                  id,
+		OrgCode:             orgCode,
+		ShipId:              shipId,
+		ShipName:            shipName,
+		ShipType:            shipType,
+		ShipSize:            shipSize,
+		EnergyType:          energyType,
+		EnergyName:          energyName,
+		ConsumeQuantity:     consumeQuantity,
+		ConsumeQuantityUnit: consumeQuantityUnit,
+		OperatorId:          operatorId,
+		StartTime:           startTime,
+		EndTime:             endTime,
 	}
 	energyConsumptionJSON, err := json.Marshal(energyConsumption)
 	if err != nil {
@@ -141,7 +188,7 @@ func (s *EnergyConsumptionContract) EnergyConsumptionExists(ctx contractapi.Tran
 func (s *EnergyConsumptionContract) GetAllEnergyConsumptions(ctx contractapi.TransactionContextInterface) ([]*EnergyConsumption, error) {
 	// range query with empty string for startKey and endKey does an
 	// open-ended query of all energyConsumptions in the chaincode namespace.
-	resultsIterator, err := ctx.GetStub().GetStateByRange("", "")
+	resultsIterator, err := ctx.GetStub().GetStateByRange("ec1", "ec"+string(math.MaxInt64))
 	if err != nil {
 		return nil, err
 	}

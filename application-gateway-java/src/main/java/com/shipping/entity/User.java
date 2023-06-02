@@ -7,46 +7,46 @@ package com.shipping.entity;
  * @description: TODO
  */
 public class User {
-    private String id;
-    private String username;
-    private Integer role;
+    private String ID;
+    private String Username;
+    private Integer Role;
 
-    public User(String id, String username, Integer role) {
-        this.id = id;
-        this.username = username;
-        this.role = role;
+    public User(String ID, String username, Integer role) {
+        this.ID = ID;
+        Username = username;
+        Role = role;
     }
 
-    public String getId() {
-        return id;
+    public String getID() {
+        return ID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setID(String ID) {
+        ID = ID;
     }
 
     public String getUsername() {
-        return username;
+        return Username;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        Username = username;
     }
 
     public Integer getRole() {
-        return role;
+        return Role;
     }
 
     public void setRole(Integer role) {
-        this.role = role;
+        Role = role;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "id='" + id + '\'' +
-                ", username='" + username + '\'' +
-                ", role=" + (role == 1 ? "船员" : "监管员") +
+                "ID='" + ID + '\'' +
+                ", Username='" + Username + '\'' +
+                ", Role=" + Role +
                 '}';
     }
 }

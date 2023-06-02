@@ -7,47 +7,47 @@ package com.shipping.entity;
  * @description: TODO
  */
 public class Attribute {
-    private String id;
-    private String name;
+    private String ID;
+    private String Name;
 
-    private String value;
+    private String Value;
 
-    public Attribute(String id, String name,String value) {
-        this.id = id;
-        this.name = name;
-        this.value = value;
+    public Attribute(String ID, String name, String value) {
+        this.ID = ID;
+        Name = name;
+        Value = value;
     }
 
-    public String getId() {
-        return id;
+    public String getID() {
+        return ID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setID(String ID) {
+        this.ID = ID;
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        Name = name;
     }
 
     public String getValue() {
-        return value;
+        return Value;
     }
 
     public void setValue(String value) {
-        this.value = value;
+        Value = value;
     }
 
     @Override
     public String toString() {
         return "Attribute{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", value='" + value + '\'' +
+                "ID='" + ID + '\'' +
+                ", Name='" + Name + '\'' +
+                ", Value='" + Value + '\'' +
                 '}';
     }
 }

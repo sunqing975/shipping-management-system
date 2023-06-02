@@ -3,6 +3,7 @@ package chaincode
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
@@ -140,7 +141,7 @@ func (s *UserAttributeContract) UserAttributeExists(ctx contractapi.TransactionC
 func (s *UserAttributeContract) GetAllUserAttributes(ctx contractapi.TransactionContextInterface) ([]*UserAttribute, error) {
 	// range query with empty string for startKey and endKey does an
 	// open-ended query of all uas in the chaincode namespace.
-	resultsIterator, err := ctx.GetStub().GetStateByRange("", "")
+	resultsIterator, err := ctx.GetStub().GetStateByRange("ua1", "ua"+string(math.MaxInt64))
 	if err != nil {
 		return nil, err
 	}

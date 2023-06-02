@@ -3,6 +3,7 @@ package chaincode
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
@@ -26,7 +27,7 @@ func (s *AttributeContract) InitLedger(ctx contractapi.TransactionContextInterfa
 	attributes := []Attribute{
 		{ID: "att1", Name: "a1", Value: "v1"},
 		{ID: "att2", Name: "a2", Value: "v2"},
-		{ID: "attr3", Name: "a3", Value: "v3"},
+		{ID: "att3", Name: "a3", Value: "v3"},
 		{ID: "att4", Name: "a4", Value: "v4"},
 		{ID: "att5", Name: "a5", Value: "v5"},
 		{ID: "att6", Name: "a6", Value: "v6"},
@@ -141,7 +142,7 @@ func (s *AttributeContract) AttributeExists(ctx contractapi.TransactionContextIn
 func (s *AttributeContract) GetAllAttributes(ctx contractapi.TransactionContextInterface) ([]*Attribute, error) {
 	// range query with empty string for startKey and endKey does an
 	// open-ended query of all attributes in the chaincode namespace.
-	resultsIterator, err := ctx.GetStub().GetStateByRange("", "")
+	resultsIterator, err := ctx.GetStub().GetStateByRange("att1", "att"+string(math.MaxInt64))
 	if err != nil {
 		return nil, err
 	}

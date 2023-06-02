@@ -7,180 +7,194 @@ package com.shipping.entity;
  * @description: TODO
  */
 public class EnergyConsumption {
-    private String id;
+    private String ID;
     /**
      * 机构代码
      */
-    private Integer orgCode;
+    private Integer OrgCode;
     /**
      * 船只编号
      */
-    private Integer shipId;
+    private Integer ShipId;
     /**
      * 船只名称
      */
-    private String shipName;
+    private String ShipName;
     /**
      * 船只类型
      */
-    private String shipType;
+    private String ShipType;
     /**
      * 船尺寸
      */
-    private Double shipSize;
+    private Double ShipSize;
     /**
      * 能源类型
      */
-    private Double energyType;
+    private Double EnergyType;
     /**
      * 能源名称
      */
-    private String energyName;
+    private String EnergyName;
     /**
      * 能耗数量
      */
-    private Double consumeQuantity;
+    private Double ConsumeQuantity;
 
     /**
      * 能耗数量单位
      */
-    private String consumeQuantityUnit;
+    private String ConsumeQuantityUnit;
 
     /**
      * 上传者ID
      */
-    private String operatorId;
+    private String OperatorId;
     /**
      * 开始时间
      */
-    private Long startTime;
+    private Long StartTime;
     /**
      * 结束时间
      */
-    private Long endTime;
+    private Long EndTime;
 
-    public EnergyConsumption(String id, Integer orgCode, Integer shipId,
-                             String shipName, String shipType,
-                             Double shipSize, Double energyType,
-                             String energyName, Double consumeQuantity,
-                             String consumeQuantityUnit, String operatorId,
-                             Long startTime, Long endTime) {
-        this.id = id;
-        this.orgCode = orgCode;
-        this.shipId = shipId;
-        this.shipName = shipName;
-        this.shipType = shipType;
-        this.shipSize = shipSize;
-        this.energyType = energyType;
-        this.energyName = energyName;
-        this.consumeQuantity = consumeQuantity;
-        this.consumeQuantityUnit = consumeQuantityUnit;
-        this.operatorId = operatorId;
-        this.startTime = startTime;
-        this.endTime = endTime;
+    public EnergyConsumption(String ID, Integer orgCode, Integer shipId, String shipName, String shipType, Double shipSize, Double energyType, String energyName, Double consumeQuantity, String consumeQuantityUnit, String operatorId, Long startTime, Long endTime) {
+        this.ID = ID;
+        OrgCode = orgCode;
+        ShipId = shipId;
+        ShipName = shipName;
+        ShipType = shipType;
+        ShipSize = shipSize;
+        EnergyType = energyType;
+        EnergyName = energyName;
+        ConsumeQuantity = consumeQuantity;
+        ConsumeQuantityUnit = consumeQuantityUnit;
+        OperatorId = operatorId;
+        StartTime = startTime;
+        EndTime = endTime;
     }
 
-    public String getId() {
-        return id;
+    public String getID() {
+        return ID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setID(String ID) {
+        this.ID = ID;
     }
 
     public Integer getOrgCode() {
-        return orgCode;
+        return OrgCode;
     }
 
     public void setOrgCode(Integer orgCode) {
-        this.orgCode = orgCode;
+        OrgCode = orgCode;
     }
 
     public Integer getShipId() {
-        return shipId;
+        return ShipId;
     }
 
     public void setShipId(Integer shipId) {
-        this.shipId = shipId;
-    }
-
-    public void setConsumeQuantity(Double consumeQuantity) {
-        this.consumeQuantity = consumeQuantity;
+        ShipId = shipId;
     }
 
     public String getShipName() {
-        return shipName;
+        return ShipName;
     }
 
     public void setShipName(String shipName) {
-        this.shipName = shipName;
+        ShipName = shipName;
     }
 
     public String getShipType() {
-        return shipType;
+        return ShipType;
     }
 
     public void setShipType(String shipType) {
-        this.shipType = shipType;
+        ShipType = shipType;
     }
 
     public Double getShipSize() {
-        return shipSize;
+        return ShipSize;
     }
 
     public void setShipSize(Double shipSize) {
-        this.shipSize = shipSize;
+        ShipSize = shipSize;
     }
 
     public Double getEnergyType() {
-        return energyType;
+        return EnergyType;
     }
 
     public void setEnergyType(Double energyType) {
-        this.energyType = energyType;
+        EnergyType = energyType;
     }
 
     public String getEnergyName() {
-        return energyName;
+        return EnergyName;
     }
 
     public void setEnergyName(String energyName) {
-        this.energyName = energyName;
+        EnergyName = energyName;
     }
 
     public Double getConsumeQuantity() {
-        return consumeQuantity;
+        return ConsumeQuantity;
+    }
+
+    public void setConsumeQuantity(Double consumeQuantity) {
+        ConsumeQuantity = consumeQuantity;
     }
 
     public String getConsumeQuantityUnit() {
-        return consumeQuantityUnit;
+        return ConsumeQuantityUnit;
     }
 
     public void setConsumeQuantityUnit(String consumeQuantityUnit) {
-        this.consumeQuantityUnit = consumeQuantityUnit;
+        ConsumeQuantityUnit = consumeQuantityUnit;
     }
 
     public String getOperatorId() {
-        return operatorId;
+        return OperatorId;
     }
 
     public void setOperatorId(String operatorId) {
-        this.operatorId = operatorId;
+        OperatorId = operatorId;
     }
 
     public Long getStartTime() {
-        return startTime;
+        return StartTime;
     }
 
     public void setStartTime(Long startTime) {
-        this.startTime = startTime;
+        StartTime = startTime;
     }
 
     public Long getEndTime() {
-        return endTime;
+        return EndTime;
     }
 
     public void setEndTime(Long endTime) {
-        this.endTime = endTime;
+        EndTime = endTime;
+    }
+
+    @Override
+    public String toString() {
+        return "EnergyConsumption{" +
+                "ID='" + ID + '\'' +
+                ", OrgCode=" + OrgCode +
+                ", ShipId=" + ShipId +
+                ", ShipName='" + ShipName + '\'' +
+                ", ShipType='" + ShipType + '\'' +
+                ", ShipSize=" + ShipSize +
+                ", EnergyType=" + EnergyType +
+                ", EnergyName='" + EnergyName + '\'' +
+                ", ConsumeQuantity=" + ConsumeQuantity +
+                ", ConsumeQuantityUnit='" + ConsumeQuantityUnit + '\'' +
+                ", OperatorId='" + OperatorId + '\'' +
+                ", StartTime=" + StartTime +
+                ", EndTime=" + EndTime +
+                '}';
     }
 }

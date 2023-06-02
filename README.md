@@ -15,6 +15,8 @@ The Fabric test network is used to deploy and run this sample. Follow these step
    # To deploy the Java chaincode implementation
    sudo ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-java/ -ccl java
    
+   sudo ./network.sh deployCC -ccn basic -ccp ../shipping-management-system/chaincode-go/ -ccl go
+   
    sudo ./network.sh deployCC -ccn basic -ccp ../shipping-management-system/chaincode-java/ -ccl java
    ```
 

@@ -12,7 +12,10 @@ import (
 )
 
 func main() {
-	contract, err := contractapi.NewChaincode(&chaincode.UserAttributeContract{},
+	contract, err := contractapi.NewChaincode(
+		&chaincode.ECPolicyContract{},
+		&chaincode.EnergyConsumptionContract{},
+		&chaincode.UserAttributeContract{},
 		&chaincode.AttributeContract{},
 		&chaincode.UserContract{})
 	if err != nil {
